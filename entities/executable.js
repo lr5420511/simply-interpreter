@@ -16,7 +16,6 @@ const Executable = module.exports = function(code) {
 Executable.prototype = {
     constructor: Executable,
     execute: function(compilation, index) {
-        console.log(this.command);
         if (this.jumpable) return;
         const method = Executable.presets[this.command];
         assert(method,
