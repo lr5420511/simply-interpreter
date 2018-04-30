@@ -5,12 +5,14 @@ const assert = require('assert');
 const Executable = module.exports = function(code) {
     this.jumpable =
         code[code.length - 1] === Executable.struct.LABEL;
-    const temp = code.indexOf(' ');
-    this.command = code.substring(
-        0, temp === -1 ? code.length : temp
-    );
-    this.arguments = temp === -1 ? [] :
-        code.substring(temp + 1).trimLeft().split(', ');
+    const temp = code.match(
+        /(^[^\s]+|[^\,\']+(\,|$)|\'[^\']+\'(\,|$))/g
+    ).map(cur => {
+        return cur.replace(/(^\s+)/, '')
+            .replace(/\,$/, '');
+    });
+    this.command = temp[0];
+    this.arguments = temp.slice(1);
 };
 
 Executable.prototype = {
@@ -38,7 +40,6 @@ const replace = Executable.replace = function(
 };
 
 Executable.struct = {
-    COMMENT: ';',
     LABEL: ':'
 };
 

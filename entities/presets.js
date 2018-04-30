@@ -157,17 +157,8 @@ Executable.presets = {
             .map(cur =>
                 compilation.isVariable(cur) ?
                 compilation.domain[cur] :
-                cur
-            ).join(', ').match(/ *(\'[^\']*?\'|[^\,]+)(,|$)/g)
-            .map(cur => {
-                if (cur[cur.length - 1] === ',') {
-                    cur = cur.substring(0, cur.length - 1);
-                }
-                return cur.trimLeft();
-            }).join('');
-        compilation.result = replace(replace(
-            compilation.result, '\'', ''
-        ), '\"', '');
+                cur.replace(/^\'/, '').replace(/\'$/, '')
+            ).join('');
     },
     end: function(compilation, index) {
         compilation.end = true;
